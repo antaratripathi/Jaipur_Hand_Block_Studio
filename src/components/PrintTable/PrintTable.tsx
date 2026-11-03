@@ -71,14 +71,12 @@ export default function PrintTable() {
     onPutDown,
   });
 
-  const onPickInk = (id: string) => {
+  const onDab = (id: string) => {
+    const hex = INKS.find((i) => i.id === id)!.hex;
     setInkId(id);
-    updateMessage({ color: INKS.find((i) => i.id === id)!.hex });
-  };
-
-  const onDab = () => {
+    updateMessage({ color: hex });
     if (!stampId) return;
-    dab(stampId, ink.hex);
+    dab(stampId, hex);
     sounds.ink();
   };
 
@@ -144,7 +142,7 @@ export default function PrintTable() {
           <BlockTray selectedId={stampId} inks={blocks} onSelect={setStampId} />
 
           <div className={styles.inkRow}>
-            <InkPad inkId={inkId} holding={def?.name ?? null} onPick={onPickInk} onDab={onDab} />
+            <InkPad inkId={inkId} holding={def?.name ?? null} onDab={onDab} />
             <p key={`${step}-${dryShake}`} className={`${styles.step} ${dryShake && def && !blockInk ? styles.nudge : ''}`} aria-live="polite">
               {step}
             </p>

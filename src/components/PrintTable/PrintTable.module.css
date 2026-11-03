@@ -73,13 +73,12 @@
 
 .inkRow {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: var(--space-4);
 }
 
 .step {
   margin: 0;
-  padding-top: calc(var(--block-size) / 2 - 0.6em);
   font-size: var(--text-sm);
   line-height: 1.4;
   color: var(--color-text-muted);

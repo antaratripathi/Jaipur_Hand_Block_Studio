@@ -5,45 +5,36 @@ import styles from './InkPad.module.css';
 interface Props {
   inkId: string;
   holding: string | null;
-  onPick: (inkId: string) => void;
-  onDab: () => void;
+  /** Tapping a pad chooses its colour (also used for the message) and inks the block in hand. */
+  onDab: (inkId: string) => void;
 }
 
-/** The ink pad: felt in the chosen colour, with the four colours beneath it. */
-export default function InkPad({ inkId, holding, onPick, onDab }: Props) {
-  const [dabbing, setDabbing] = useState(0);
-  const ink = INKS.find((i) => i.id === inkId) ?? INKS[0];
+/** A row of ink pads, one per colour, laid out like the blocks. */
+export default function InkPad({ inkId, holding, onDab }: Props) {
+  const [dab, setDab] = useState<{ id: string; n: number } | null>(null);
 
   return (
-    <div className={styles.wrap}>
-      <button
-        type="button"
-        className={`${styles.tin} ${dabbing ? (dabbing % 2 ? styles.dabA : styles.dabB) : ''}`}
-        style={{ '--ink': ink.hex } as React.CSSProperties}
-        aria-label={holding ? `Ink the ${holding} block with ${ink.name}` : `${ink.name} ink pad`}
-        onClick={() => {
-          if (!holding) return;
-          onDab();
-          setDabbing((n) => n + 1);
-        }}
-      >
-        <span className={styles.felt} aria-hidden />
-      </button>
-      <div className={styles.colours} role="radiogroup" aria-label="Ink colour">
-        {INKS.map((c) => (
+    <div className={styles.pads} role="group" aria-label="Ink pads">
+      {INKS.map((ink) => {
+        const dabbing = dab?.id === ink.id;
+        return (
           <button
-            key={c.id}
+            key={ink.id}
             type="button"
-            role="radio"
-            aria-checked={c.id === inkId}
-            aria-label={c.name}
-            title={c.name}
-            className={styles.colour}
-            style={{ '--ink': c.hex } as React.CSSProperties}
-            onClick={() => onPick(c.id)}
-          />
-        ))}
-      </div>
+            className={`${styles.pad} ${dabbing ? (dab!.n % 2 ? styles.dabA : styles.dabB) : ''}`}
+            style={{ '--ink': ink.hex } as React.CSSProperties}
+            aria-pressed={ink.id === inkId}
+            aria-label={holding ? `Ink the ${holding} block with ${ink.name}` : `${ink.name} ink`}
+            title={ink.name}
+            onClick={() => {
+              onDab(ink.id);
+              if (holding) setDab((d) => ({ id: ink.id, n: (d?.n ?? 0) + 1 }));
+            }}
+          >
+            <span className={styles.felt} aria-hidden />
+          </button>
+        );
+      })}
     </div>
   );
 }
