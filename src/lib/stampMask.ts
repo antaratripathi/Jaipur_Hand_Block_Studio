@@ -1,5 +1,6 @@
 import type { StampDef } from './types';
 import { createCanvas } from './canvas';
+import { subpaths } from './svgShapes';
 
 const pngImages = new Map<string, HTMLImageElement>();
 const maskCache = new Map<string, HTMLCanvasElement>();
@@ -35,7 +36,11 @@ export function getStampMask(def: StampDef, size: number): HTMLCanvasElement | n
   ctx.fillStyle = '#fff';
   if (def.svgPath) {
     ctx.scale(px / 100, px / 100);
-    ctx.fill(new Path2D(def.svgPath), 'evenodd');
+    for (const d of subpaths(def.svgPath)) ctx.fill(new Path2D(d));
+    if (def.cut) {
+      ctx.globalCompositeOperation = 'destination-out';
+      for (const d of subpaths(def.cut)) ctx.fill(new Path2D(d));
+    }
   } else if (def.pngMask) {
     const img = pngImages.get(def.id);
     if (!img) return null;

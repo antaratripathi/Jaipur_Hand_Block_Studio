@@ -5,7 +5,10 @@ import { randomSeed, seededRandom } from '../lib/random';
 const PRESS_MS = 140;
 
 interface Options {
-  surfaceRef: RefObject<HTMLElement>;
+  /** Where the block follows the pointer and the wheel rotates it. */
+  areaRef: RefObject<HTMLElement>;
+  /** Takes focus for keyboard aiming. */
+  focusRef: RefObject<HTMLElement>;
   paperRef: RefObject<HTMLElement>;
   stampId: string | null;
   color: string;
@@ -33,7 +36,7 @@ const angle = (a: Point, b: Point) => (Math.atan2(b.y - a.y, b.x - a.x) * 180) /
  * - Scroll wheel rotates.
  */
 export function useStamping(o: Options) {
-  const { surfaceRef, paperRef, stampId, color, inkLevel, reducedMotion, onDry, onPress, onPutDown } = o;
+  const { areaRef, focusRef, paperRef, stampId, color, inkLevel, reducedMotion, onDry, onPress, onPutDown } = o;
   const [ghost, setGhost] = useState<Point | null>(null);
   const [rotation, setRotation] = useState(0);
   const [pressing, setPressing] = useState(false);
@@ -69,7 +72,7 @@ export function useStamping(o: Options) {
 
   // Scroll wheel rotates the block in hand.
   useEffect(() => {
-    const el = surfaceRef.current;
+    const el = areaRef.current;
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
       if (!stampId) return;
@@ -78,7 +81,7 @@ export function useStamping(o: Options) {
     };
     el.addEventListener('wheel', onWheel, { passive: false });
     return () => el.removeEventListener('wheel', onWheel);
-  }, [surfaceRef, stampId, rotate]);
+  }, [areaRef, stampId, rotate]);
 
   // Keyboard aiming, from anywhere except text fields.
   useEffect(() => {
@@ -97,7 +100,7 @@ export function useStamping(o: Options) {
       const mv = moves[e.key];
       if (mv) {
         e.preventDefault();
-        surfaceRef.current?.focus({ preventScroll: true });
+        focusRef.current?.focus({ preventScroll: true });
         setGhost((g) => {
           const from = g ?? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
           return {
@@ -115,7 +118,7 @@ export function useStamping(o: Options) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [stampId, paperRef, surfaceRef, rotate, onPutDown]);
+  }, [stampId, paperRef, focusRef, rotate, onPutDown]);
 
   useEffect(() => {
     if (!stampId) setGhost(null);
@@ -129,6 +132,8 @@ export function useStamping(o: Options) {
   const handlers = {
     onPointerDown: (e: React.PointerEvent) => {
       if (!stampId || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      // Aim and press only on the paper; elsewhere (tray, ink pad) clicks work as normal.
+      if (!paperRef.current?.contains(e.target as Node)) return;
       (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
       pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (pointers.current.size === 2) {
@@ -170,6 +175,9 @@ export function useStamping(o: Options) {
     onPointerLeave: (e: React.PointerEvent) => {
       if (e.pointerType === 'mouse') setGhost(null);
     },
+  };
+
+  const focusHandlers = {
     onKeyDown: (e: React.KeyboardEvent) => {
       if (!stampId || (e.key !== 'Enter' && e.key !== ' ')) return;
       e.preventDefault();
@@ -181,5 +189,5 @@ export function useStamping(o: Options) {
     },
   };
 
-  return { ghost, rotation, rotate, pressing, handlers };
+  return { ghost, rotation, rotate, pressing, handlers, focusHandlers };
 }

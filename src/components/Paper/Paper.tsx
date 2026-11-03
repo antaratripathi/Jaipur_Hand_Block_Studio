@@ -51,13 +51,13 @@ const Paper = forwardRef<HTMLDivElement, Props>(function Paper({ scene, assetsVe
     const [w, h] = fitCanvas(inkCanvas.current, width, height);
     const ctx = inkCanvas.current.getContext('2d')!;
     ctx.clearRect(0, 0, w, h);
-    drawInk(ctx, w, h, scene);
+    drawInk(ctx, w, h, scene, false);
   }, [scene, assetsVersion, width, height]);
 
   const shift = pressCount ? (pressCount % 2 ? styles.shiftA : styles.shiftB) : '';
 
   return (
-    <div ref={ref} className={`${styles.stage} ${styles[phase]}`}>
+    <div ref={ref} data-card className={`${styles.stage} ${styles[phase]}`}>
       <div ref={sizeRef} className={`${styles.shadow} ${shift}`}>
         <div className={styles.sheet} style={{ clipPath: clip }}>
           <canvas ref={paperCanvas} className={styles.canvas} aria-hidden />
@@ -65,7 +65,7 @@ const Paper = forwardRef<HTMLDivElement, Props>(function Paper({ scene, assetsVe
             ref={inkCanvas}
             className={`${styles.canvas} ${styles.ink}`}
             role="img"
-            aria-label={`Card with ${scene.presses.length} prints${scene.message.text ? ` and the message: ${scene.message.text}` : ''}`}
+            aria-label={`Card with ${scene.presses.length} prints`}
           />
           <div className={styles.wash} aria-hidden />
         </div>

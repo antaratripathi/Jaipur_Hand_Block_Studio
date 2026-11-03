@@ -1,0 +1,68 @@
+.field {
+  position: absolute;
+  z-index: 2;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  /* Ink sinks into the paper like the prints do */
+  mix-blend-mode: multiply;
+  opacity: 0.92;
+}
+
+.input::placeholder {
+  color: var(--color-text-faint);
+  opacity: 1;
+}
+
+.input:focus::placeholder {
+  color: transparent;
+}
+
+.grip {
+  position: absolute;
+  top: 0.2em;
+  left: -22px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-faint);
+  fill: currentColor;
+  cursor: grab;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+
+.grip:active { cursor: grabbing; }
+
+.field:focus-within .grip,
+.grip:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .field:hover .grip { opacity: 1; }
+}
+
+/* Touch screens have no hover, so keep the handle visible */
+@media (hover: none) {
+  .grip { opacity: 0.8; }
+}
+
+.passive {
+  pointer-events: none;
+}

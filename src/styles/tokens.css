@@ -1,23 +1,24 @@
 /* Design tokens: the single source for colour, spacing, type, radii, shadows, motion. */
 :root {
   /* Surfaces */
-  --color-table: #cbb08a;
-  --color-table-dark: #a98c66;
-  --color-paper: #f4ecdc;
-  --color-wood-light: #c99a66;
-  --color-wood: #a87545;
-  --color-wood-dark: #6f4a2a;
-  --color-text: #3b2e22;
-  --color-text-muted: #6d5a47;
-  --color-focus: #2f4a8a;
+  --color-page: #ffffff;
+  --color-paper: #f4f2ec;
+  --color-wood-light: #c9925c;
+  --color-wood: #a8703f;
+  --color-wood-side: #7c4c27;
+  --color-carving: #f2e7d0;
+  --color-tin: #24252b;
+  --color-text: #1f1f1f;
+  --color-text-muted: #8e8e93;
+  --color-text-faint: #b8b8bd;
+  --color-line: #d7d7db;
+  --color-focus: #1f2f6b;
 
   /* Inks (mirrored in lib/inks.ts for canvas use) */
-  --ink-indigo: #2c3e7a;
-  --ink-madder: #a8322d;
-  --ink-turmeric: #d9a21b;
-  --ink-forest: #2f5d3a;
-  --ink-charcoal: #33302e;
-  --ink-rust: #b2552b;
+  --ink-navy: #1f2f6b;
+  --ink-red: #c8312b;
+  --ink-pink: #e57fa6;
+  --ink-lime: #9bc23a;
 
   /* Spacing */
   --space-1: 4px;
@@ -27,29 +28,33 @@
   --space-5: 24px;
   --space-6: 32px;
   --space-7: 48px;
+  --space-8: 72px;
 
   /* Type */
   --font-display: 'Fraunces', Georgia, serif;
-  --font-ui: 'Patrick Hand', 'Segoe UI', system-ui, sans-serif;
-  --text-sm: 0.875rem;
-  --text-md: 1rem;
-  --text-lg: 1.375rem;
+  --font-ui: 'Lato', system-ui, -apple-system, sans-serif;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-lg: 1.25rem;
 
   /* Radii */
   --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 14px;
+  --radius-block: 6px;
+  --radius-md: 10px;
   --radius-pill: 999px;
 
+  /* Sizes */
+  --block-size: 62px;
+
   /* Shadows */
-  --shadow-paper: 0 2px 3px rgba(60, 40, 20, 0.18), 0 10px 24px rgba(60, 40, 20, 0.22);
-  --shadow-block: 0 2px 0 var(--color-wood-dark), 0 6px 10px rgba(50, 30, 10, 0.3);
-  --shadow-lift: 0 18px 28px rgba(40, 25, 10, 0.35);
-  --shadow-press: 0 2px 4px rgba(40, 25, 10, 0.35);
+  --shadow-paper: 0 1px 2px rgba(40, 30, 20, 0.12), 0 8px 22px rgba(40, 30, 20, 0.12);
+  --shadow-block: 0 3px 0 var(--color-wood-side), 0 6px 10px rgba(40, 25, 10, 0.18);
+  --shadow-block-lift: 0 3px 0 var(--color-wood-side), 0 18px 24px rgba(40, 25, 10, 0.28);
+  --shadow-block-press: 0 1px 0 var(--color-wood-side), 0 2px 3px rgba(40, 25, 10, 0.3);
 
   /* Motion */
   --ease-soft: cubic-bezier(0.25, 0.8, 0.3, 1);
-  --dur-fast: 120ms;
-  --dur-med: 240ms;
+  --dur-fast: 140ms;
+  --dur-med: 260ms;
   --dur-slow: 600ms;
 }

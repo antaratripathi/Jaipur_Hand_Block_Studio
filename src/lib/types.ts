@@ -3,8 +3,10 @@ export interface StampDef {
   name: string;
   /** Width of the printed block as a fraction of the card width. */
   defaultSize: number;
-  /** SVG path data in a 100×100 viewBox, filled with the even-odd rule. */
+  /** SVG path data in a 100×100 viewBox. Overlapping shapes merge (nonzero fill). */
   svgPath?: string;
+  /** Optional path carved out of svgPath (eyes, veins, highlights). */
+  cut?: string;
   /** Alternatively, a URL to a PNG whose alpha channel is the carved face. */
   pngMask?: string;
 }
@@ -29,7 +31,7 @@ export interface Press {
   seed: number;
 }
 
-/** The handwritten message. Position is the text centre as a fraction of the card. */
+/** The handwritten message. Position is the top-left of the text block as a fraction of the card. */
 export interface Message {
   text: string;
   fontId: string;

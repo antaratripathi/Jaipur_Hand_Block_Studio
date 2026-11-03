@@ -4,41 +4,46 @@ import styles from './InkPad.module.css';
 
 interface Props {
   inkId: string;
-  /** Name of the block in hand, if any — tapping a pad then inks it. */
   holding: string | null;
-  onDab: (inkId: string) => void;
+  onPick: (inkId: string) => void;
+  onDab: () => void;
 }
 
-export default function InkPad({ inkId, holding, onDab }: Props) {
-  const [dabbing, setDabbing] = useState<string | null>(null);
-
-  const handle = (id: string) => {
-    onDab(id);
-    setDabbing(id);
-    window.setTimeout(() => setDabbing(null), 260);
-  };
+/** One ink tin whose felt shows the chosen colour, with the four colours beneath it. */
+export default function InkPad({ inkId, holding, onPick, onDab }: Props) {
+  const [dabbing, setDabbing] = useState(0);
+  const ink = INKS.find((i) => i.id === inkId) ?? INKS[0];
 
   return (
-    <section className={styles.tin} aria-label="Ink pad">
-      <div className={styles.pads}>
-        {INKS.map((ink) => (
+    <div className={styles.wrap}>
+      <button
+        type="button"
+        className={`${styles.tin} ${dabbing ? (dabbing % 2 ? styles.dabA : styles.dabB) : ''}`}
+        style={{ '--ink': ink.hex } as React.CSSProperties}
+        aria-label={holding ? `Ink the ${holding} block with ${ink.name}` : `${ink.name} ink pad`}
+        onClick={() => {
+          if (!holding) return;
+          onDab();
+          setDabbing((n) => n + 1);
+        }}
+      >
+        <span className={styles.felt} aria-hidden />
+      </button>
+      <div className={styles.colours} role="radiogroup" aria-label="Ink colour">
+        {INKS.map((c) => (
           <button
-            key={ink.id}
+            key={c.id}
             type="button"
-            className={`${styles.pad} ${ink.id === inkId ? styles.selected : ''} ${dabbing === ink.id ? styles.dab : ''}`}
-            style={{ '--ink': ink.hex } as React.CSSProperties}
-            aria-pressed={ink.id === inkId}
-            aria-label={holding ? `Ink the ${holding} block with ${ink.name}` : `Choose ${ink.name} ink`}
-            title={ink.name}
-            onClick={() => handle(ink.id)}
-          >
-            <span className={styles.felt} aria-hidden />
-          </button>
+            role="radio"
+            aria-checked={c.id === inkId}
+            aria-label={c.name}
+            title={c.name}
+            className={styles.colour}
+            style={{ '--ink': c.hex } as React.CSSProperties}
+            onClick={() => onPick(c.id)}
+          />
         ))}
       </div>
-      <p className={styles.caption} aria-live="polite">
-        {holding ? `Dab the ${holding.toLowerCase()} block on an ink` : `${INKS.find((i) => i.id === inkId)?.name} ink`}
-      </p>
-    </section>
+    </div>
   );
 }

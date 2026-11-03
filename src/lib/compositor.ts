@@ -1,6 +1,6 @@
 import type { Message, Press } from './types';
 import { STAMPS_BY_ID } from '../assets/stamps/stamps';
-import { FONTS_BY_ID, HAND_FONTS, messageFontPx } from './fonts';
+import { LINE_HEIGHT, MESSAGE_WIDTH, messageFont, wrapLines } from './fonts';
 import { getPaperTexture } from './paperTexture';
 import { renderImprint } from './renderImprint';
 
@@ -10,14 +10,15 @@ export interface CardScene {
   message: Message;
 }
 
-export const LINE_HEIGHT = 1.15;
-
 export function drawPaper(ctx: CanvasRenderingContext2D, w: number, h: number, scene: CardScene): void {
   ctx.drawImage(getPaperTexture(w, h, scene.paperSeed), 0, 0, w, h);
 }
 
-/** Imprints and message, multiplied onto whatever is already in ctx (paper, or transparent on screen). */
-export function drawInk(ctx: CanvasRenderingContext2D, w: number, h: number, scene: CardScene): void {
+/**
+ * Imprints (and optionally the message), multiplied onto whatever is already in ctx.
+ * On screen the message is a live textarea instead, so it is left out there.
+ */
+export function drawInk(ctx: CanvasRenderingContext2D, w: number, h: number, scene: CardScene, withMessage = true): void {
   ctx.save();
   ctx.globalCompositeOperation = 'multiply';
   for (const press of scene.presses) {
@@ -34,17 +35,17 @@ export function drawInk(ctx: CanvasRenderingContext2D, w: number, h: number, sce
   }
 
   const m = scene.message;
-  if (m.text.trim()) {
-    const font = FONTS_BY_ID[m.fontId] ?? HAND_FONTS[0];
-    const px = messageFontPx(m.text, m.fontId, m.size, w);
-    const lines = m.text.split('\n');
-    ctx.font = `${px}px ${font.family}`;
+  if (withMessage && m.text.trim()) {
+    const font = messageFont(m.fontId, m.size, w);
+    ctx.font = font.css;
     ctx.fillStyle = m.color;
-    ctx.globalAlpha = 0.9;
-    ctx.textAlign = 'center';
+    ctx.globalAlpha = 0.92;
+    ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    const top = m.y * h - ((lines.length - 1) * px * LINE_HEIGHT) / 2;
-    lines.forEach((line, i) => ctx.fillText(line, m.x * w, top + i * px * LINE_HEIGHT));
+    const lineH = font.px * LINE_HEIGHT;
+    wrapLines(ctx, m.text, MESSAGE_WIDTH * w).forEach((line, i) =>
+      ctx.fillText(line, m.x * w, m.y * h + lineH * (i + 0.5)),
+    );
   }
   ctx.restore();
 }

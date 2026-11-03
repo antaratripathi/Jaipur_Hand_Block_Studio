@@ -1,6 +1,6 @@
 import { STAMPS } from '../../assets/stamps/stamps';
 import type { BlockInk } from '../../hooks/useInk';
-import StampBlock from './StampBlock';
+import WoodBlock from '../WoodBlock/WoodBlock';
 import styles from './BlockTray.module.css';
 
 interface Props {
@@ -9,18 +9,25 @@ interface Props {
   onSelect: (id: string | null) => void;
 }
 
+/** The row of blocks. A lifted block leaves an empty slot; tap the slot to put it back. */
 export default function BlockTray({ selectedId, inks, onSelect }: Props) {
   return (
-    <section className={styles.tray} aria-label="Stamp blocks">
-      {STAMPS.map((def) => (
-        <StampBlock
-          key={def.id}
-          def={def}
-          selected={def.id === selectedId}
-          ink={inks[def.id]}
-          onSelect={() => onSelect(def.id === selectedId ? null : def.id)}
-        />
-      ))}
-    </section>
+    <div className={styles.tray} role="group" aria-label="Stamp blocks">
+      {STAMPS.map((def, i) => {
+        const lifted = def.id === selectedId;
+        return (
+          <button
+            key={def.id}
+            type="button"
+            className={`${styles.slot} ${lifted ? styles.empty : ''}`}
+            aria-pressed={lifted}
+            aria-label={lifted ? `Put the ${def.name} block back` : `Pick up the ${def.name} block${inks[def.id] ? ' (inked)' : ''}`}
+            onClick={() => onSelect(lifted ? null : def.id)}
+          >
+            {!lifted && <WoodBlock def={def} ink={inks[def.id]} grainOffset={i} className={styles.block} />}
+          </button>
+        );
+      })}
+    </div>
   );
 }

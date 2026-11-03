@@ -1,96 +1,44 @@
 .tray {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4) var(--space-3);
-  padding: var(--space-4);
-  border-radius: var(--radius-lg);
-  background: rgba(90, 60, 30, 0.12);
-  box-shadow: inset 0 2px 6px rgba(60, 40, 20, 0.25);
-  align-content: start;
+  display: flex;
+  gap: var(--space-3);
 }
 
-.block {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-1);
-  padding: 14px 0 0;
-  border: 0;
+.slot {
+  flex: none;
+  width: var(--block-size);
+  height: var(--block-size);
+  padding: 0;
+  border: 1px dashed transparent;
+  border-radius: var(--radius-block);
   background: none;
   cursor: pointer;
   touch-action: manipulation;
-  transition: transform var(--dur-med) var(--ease-soft);
 }
 
-/* Turned wooden knob seen from the side, sitting on top of the block */
-.handle {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 26px;
-  height: 18px;
-  transform: translateX(-50%);
-  border-radius: 12px 12px 4px 4px;
-  background: linear-gradient(90deg, var(--color-wood-dark), var(--color-wood-light) 45%, var(--color-wood) 70%, var(--color-wood-dark));
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
-}
-
-.face {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-sm);
-  background:
-    repeating-linear-gradient(100deg, rgba(80, 45, 15, 0.12) 0 1px, transparent 1px 6px),
-    linear-gradient(160deg, var(--color-wood-light), var(--color-wood));
-  box-shadow: var(--shadow-block), inset 0 1px 0 rgba(255, 230, 190, 0.5);
-  transition: box-shadow var(--dur-med) var(--ease-soft);
-}
-
-.carving {
-  width: 78%;
-  height: 78%;
-  filter: drop-shadow(0 1px 0 rgba(255, 220, 170, 0.6));
-}
-
-.ink {
-  position: absolute;
-  filter: none;
-  transition: opacity var(--dur-slow) var(--ease-soft);
-}
-
-.name {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
-.selected {
-  transform: translateY(-6px);
-}
-
-.selected .face {
-  box-shadow: 0 2px 0 var(--color-wood-dark), var(--shadow-lift), 0 0 0 3px rgba(255, 248, 230, 0.8);
+.block {
+  transition: transform var(--dur-med) var(--ease-soft), box-shadow var(--dur-med) var(--ease-soft);
 }
 
 @media (hover: hover) {
-  .block:hover:not(.selected) {
-    transform: translateY(-2px);
+  .slot:hover .block {
+    transform: translateY(-2px) rotate(-1.5deg);
+    box-shadow: var(--shadow-block-lift);
   }
 }
 
-@media (max-width: 860px) {
+/* Where a lifted block was */
+.empty {
+  border-color: var(--color-line);
+  animation: settle var(--dur-med) var(--ease-soft);
+}
+
+@keyframes settle {
+  from { border-color: transparent; }
+}
+
+@media (max-width: 760px), (orientation: portrait) and (max-width: 1100px) {
   .tray {
-    grid-template-columns: none;
-    grid-auto-flow: column;
-    grid-auto-columns: 76px;
-    overflow-x: auto;
-    padding: var(--space-3);
-    scroll-snap-type: x proximity;
+    justify-content: space-between;
+    gap: var(--space-2);
   }
-  .block { scroll-snap-align: start; }
-  .face { width: 56px; height: 56px; }
 }

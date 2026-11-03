@@ -6,10 +6,10 @@ import { INKS } from '../lib/inks';
 const INITIAL: Message = {
   text: '',
   fontId: HAND_FONTS[0].id,
-  color: INKS[4].hex,
-  x: 0.5,
-  y: 0.84,
-  size: 0.09,
+  color: INKS[0].hex,
+  x: 0.08,
+  y: 0.76,
+  size: 0.046,
 };
 
 export function useMessage() {

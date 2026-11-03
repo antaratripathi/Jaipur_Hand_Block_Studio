@@ -7,32 +7,48 @@ export interface HandFont {
 }
 
 export const HAND_FONTS: HandFont[] = [
-  { id: 'caveat', name: 'Caveat', family: '"Caveat", cursive', scale: 1 },
-  { id: 'kalam', name: 'Kalam', family: '"Kalam", cursive', scale: 0.8 },
-  { id: 'apple', name: 'Homemade Apple', family: '"Homemade Apple", cursive', scale: 0.62 },
+  { id: 'serif', name: 'Serif', family: '"Fraunces", Georgia, serif', scale: 1 },
+  { id: 'hand', name: 'Hand', family: '"Caveat", cursive', scale: 1.3 },
+  { id: 'script', name: 'Script', family: '"Homemade Apple", cursive', scale: 0.8 },
 ];
 
 export const FONTS_BY_ID: Record<string, HandFont> = Object.fromEntries(HAND_FONTS.map((f) => [f.id, f]));
 
-/** Resolves once all handwriting fonts are ready for canvas drawing. */
+/** Message text box: width as a fraction of the card, and line height. */
+export const MESSAGE_WIDTH = 0.84;
+export const LINE_HEIGHT = 1.3;
+
+/** Resolves once all message fonts are ready for canvas drawing. */
 export function loadHandFonts(): Promise<void> {
   if (!document.fonts) return Promise.resolve();
-  return Promise.all(HAND_FONTS.map((f) => document.fonts.load(`48px ${f.family}`)))
+  return Promise.all(HAND_FONTS.map((f) => document.fonts.load(`300 48px ${f.family}`)))
     .then(() => undefined)
     .catch(() => undefined);
 }
 
-let measureCtx: CanvasRenderingContext2D | null = null;
-
-/** Font size in px for a message on a card `cardWidth` px wide, shrunk so the widest line fits. */
-export function messageFontPx(text: string, fontId: string, size: number, cardWidth: number): number {
+export function messageFont(fontId: string, size: number, cardWidth: number) {
   const font = FONTS_BY_ID[fontId] ?? HAND_FONTS[0];
-  let px = size * font.scale * cardWidth;
-  measureCtx ??= document.createElement('canvas').getContext('2d');
-  if (!measureCtx || !px) return px;
-  measureCtx.font = `${px}px ${font.family}`;
-  const widest = Math.max(...text.split('\n').map((l) => measureCtx!.measureText(l).width));
-  const max = cardWidth * 0.88;
-  if (widest > max) px *= max / widest;
-  return px;
+  const px = size * font.scale * cardWidth;
+  const weight = font.id === 'serif' ? 300 : 400;
+  return { px, css: `${weight} ${px}px ${font.family}`, family: font.family, weight };
+}
+
+/** Greedy word wrap that matches how the on-card textarea wraps. */
+export function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+  const out: string[] = [];
+  for (const para of text.split('\n')) {
+    const words = para.split(/(\s+)/);
+    let line = '';
+    for (const word of words) {
+      const next = line + word;
+      if (line && ctx.measureText(next.trimEnd()).width > maxWidth && word.trim()) {
+        out.push(line.trimEnd());
+        line = word;
+      } else {
+        line = next;
+      }
+    }
+    out.push(line.trimEnd());
+  }
+  return out;
 }

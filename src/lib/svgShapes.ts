@@ -46,3 +46,22 @@ export function waveBand(y: number, amp: number, thickness: number, x0 = 6, x1 =
   }
   return polygon([...top, ...bottom]);
 }
+
+/** Rounded rectangle. */
+export function roundRect(x: number, y: number, w: number, h: number, r: number): string {
+  return `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
+}
+
+/** A thin crescent between two arcs, handy for carved detail lines. */
+export function crescent(x: number, y0: number, y1: number, bulge: number, thickness: number): string {
+  const mid = (y0 + y1) / 2;
+  return `M${x} ${y0}Q${x + bulge} ${mid} ${x} ${y1}Q${x + bulge - thickness} ${mid} ${x} ${y0}Z`;
+}
+
+/**
+ * Splits path data into its subpaths (each starts with an absolute M), so they can be
+ * filled one by one and always merge, whatever direction each shape was drawn in.
+ */
+export function subpaths(d: string): string[] {
+  return d.split(/(?=M)/).map((s) => s.trim()).filter(Boolean);
+}

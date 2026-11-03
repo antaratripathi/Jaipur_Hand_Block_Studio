@@ -1,4 +1,5 @@
 import type { StampDef } from '../../lib/types';
+import { subpaths } from '../../lib/svgShapes';
 
 interface Props {
   def: StampDef;
@@ -23,9 +24,18 @@ export default function StampFace({ def, fill, className, style }: Props) {
       />
     );
   }
+  const maskId = `cut-${def.id}`;
   return (
     <svg className={className} style={style} viewBox="0 0 100 100" aria-hidden>
-      <path d={def.svgPath} fill={fill} fillRule="evenodd" />
+      {def.cut && (
+        <mask id={maskId}>
+          <rect width="100" height="100" fill="#fff" />
+          {subpaths(def.cut).map((d, i) => <path key={i} d={d} fill="#000" />)}
+        </mask>
+      )}
+      <g fill={fill} mask={def.cut ? `url(#${maskId})` : undefined}>
+        {subpaths(def.svgPath ?? '').map((d, i) => <path key={i} d={d} />)}
+      </g>
     </svg>
   );
 }
