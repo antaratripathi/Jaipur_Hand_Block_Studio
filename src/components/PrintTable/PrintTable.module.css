@@ -17,10 +17,16 @@
 }
 
 .controls {
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
-.controls button {
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.controls button:not([aria-pressed]) {
   padding: var(--space-2) var(--space-4);
   border: 1px solid rgba(60, 40, 20, 0.25);
   border-radius: var(--radius-pill);
@@ -28,7 +34,7 @@
   cursor: pointer;
 }
 
-.controls button:disabled {
+.buttons button:disabled {
   opacity: 0.45;
   cursor: default;
 }
@@ -43,6 +49,23 @@
   user-select: none;
   -webkit-user-select: none;
 }
+
+.nudge {
+  position: absolute;
+  bottom: var(--space-2);
+  left: 50%;
+  translate: -50% 0;
+  margin: 0;
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: rgba(59, 46, 34, 0.85);
+  color: #fbf3e2;
+  font-size: var(--text-sm);
+  pointer-events: none;
+  animation: fadeIn var(--dur-med) var(--ease-soft);
+}
+
+@keyframes fadeIn { from { opacity: 0; } }
 
 .armed {
   cursor: none;
@@ -63,9 +86,10 @@
 
   .surface { grid-row: 1; }
   .tools { grid-row: 2; min-width: 0; overflow: visible; }
-  .controls { grid-row: 3; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .controls { grid-row: 3; gap: var(--space-2); overflow: visible; }
+  .buttons { flex-direction: row; flex-wrap: wrap; justify-content: center; }
 
   .paperSlot {
-    width: min(100%, calc((100dvh - 330px) * 2 / 3));
+    width: min(100%, calc((100dvh - 400px) * 2 / 3));
   }
 }

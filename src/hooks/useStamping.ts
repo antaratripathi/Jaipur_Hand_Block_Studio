@@ -9,7 +9,9 @@ interface Options {
   paperRef: RefObject<HTMLElement>;
   stampId: string | null;
   color: string;
+  /** 0 means the block is dry and won't print. */
   inkLevel: number;
+  onDry: () => void;
   onPress: (press: Press) => void;
 }
 
@@ -18,7 +20,7 @@ interface Options {
  * Pointer down starts aiming, moving adjusts, release presses — so a tap and a click both press,
  * and on touch you can drag to aim before letting go.
  */
-export function useStamping({ surfaceRef, paperRef, stampId, color, inkLevel, onPress }: Options) {
+export function useStamping({ surfaceRef, paperRef, stampId, color, inkLevel, onDry, onPress }: Options) {
   const [ghost, setGhost] = useState<{ x: number; y: number } | null>(null);
   const [rotation, setRotation] = useState(0);
   const [pressing, setPressing] = useState(false);
@@ -35,6 +37,10 @@ export function useStamping({ surfaceRef, paperRef, stampId, color, inkLevel, on
       const y = (clientY - rect.top) / rect.height;
       // Allow the block to hang off the edge, but its centre must be over the sheet.
       if (x < 0 || x > 1 || y < 0 || y > 1) return;
+      if (inkLevel <= 0) {
+        onDry();
+        return;
+      }
 
       const seed = randomSeed();
       const jitter = (seededRandom(seed)() - 0.5) * 6; // ±3°
@@ -44,7 +50,7 @@ export function useStamping({ surfaceRef, paperRef, stampId, color, inkLevel, on
         setPressing(false);
       }, PRESS_MS);
     },
-    [paperRef, stampId, pressing, rotation, color, inkLevel, onPress],
+    [paperRef, stampId, pressing, rotation, color, inkLevel, onDry, onPress],
   );
 
   useEffect(() => {

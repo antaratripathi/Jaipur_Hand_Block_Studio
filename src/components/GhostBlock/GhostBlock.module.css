@@ -31,3 +31,12 @@
 .pressing .face {
   opacity: 0.85;
 }
+
+.dry .face {
+  opacity: 0.3;
+}
+
+.shakeA { animation: shakeA 320ms var(--ease-soft); }
+.shakeB { animation: shakeB 320ms var(--ease-soft); }
+@keyframes shakeA { 25% { translate: -4px 0; } 50% { translate: 4px 0; } 75% { translate: -2px 0; } }
+@keyframes shakeB { 25% { translate: -4px 0; } 50% { translate: 4px 0; } 75% { translate: -2px 0; } }
