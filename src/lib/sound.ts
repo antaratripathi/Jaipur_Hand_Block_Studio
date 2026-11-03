@@ -1,19 +1,23 @@
-// Small synthesised sound effects (Web Audio, no audio files). Muted until the user turns sound on.
+// Small synthesised sound effects (Web Audio, no audio files). On by default, with a mute toggle.
 
 let ctx: AudioContext | null = null;
 let enabled = false;
 
 export function setSoundEnabled(on: boolean): void {
   enabled = on;
-  if (on) audio()?.resume();
 }
 
+/**
+ * The shared audio context, created on first use. Browsers only allow sound after the visitor
+ * interacts with the page, and every sound here plays from a click or tap, so resuming here works.
+ */
 function audio(): AudioContext | null {
   if (!ctx) {
     const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AC) return null;
     ctx = new AC();
   }
+  if (ctx.state === 'suspended') void ctx.resume();
   return ctx;
 }
 

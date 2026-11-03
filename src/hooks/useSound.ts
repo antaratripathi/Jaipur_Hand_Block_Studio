@@ -5,7 +5,8 @@ import { storage } from '../lib/storage';
 const KEY = 'stamp:sound';
 
 export function useSound() {
-  const [on, setOn] = useState(() => storage.get(KEY) === 'on');
+  // On by default; only a visitor who turned it off stays muted.
+  const [on, setOn] = useState(() => storage.get(KEY) !== 'off');
   useEffect(() => {
     setSoundEnabled(on);
   }, [on]);

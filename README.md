@@ -46,7 +46,7 @@ Rotate with the scroll wheel, the ⟲ ⟳ buttons, or a two-finger twist on touc
 
 **Keyboard:** with a block in hand, the arrow keys move it (hold Shift for bigger steps), Enter or Space presses, `[` and `]` (or R / Shift+R) rotate, and Escape puts it down.
 
-Sound effects are off by default. Use the speaker icon in the top right.
+Sound effects are on by default. Use the speaker icon in the top right to mute them.
 
 The ink colours are defined in [`src/lib/inks.ts`](src/lib/inks.ts) and mirrored as tokens in [`src/styles/tokens.css`](src/styles/tokens.css).
 
