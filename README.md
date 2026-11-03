@@ -2,7 +2,7 @@
 
 The traditional Jaipur hand block printing experience, made digital.
 
-Inspired by the block printers of Sanganer and Bagru, this project lets you print your own designs the way artisans have for centuries: with a carved block, a pad of ink, and a firm press.
+Inspired by the block printers of Sanganer and Bagru, this project lets you stamp the designs the way artisans have for centuries with a carved block, a pad of ink, and a firm press.
 
 ## How it works
 
