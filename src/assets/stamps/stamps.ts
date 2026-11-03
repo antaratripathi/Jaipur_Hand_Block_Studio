@@ -14,11 +14,11 @@ import paisley from './paisley.png';
 import horse from './horse.png';
 
 export const STAMPS: StampDef[] = [
-  { id: 'flower', name: 'Flower', defaultSize: 0.27, pngMask: flower },
-  { id: 'pomegranate', name: 'Pomegranate', defaultSize: 0.31, pngMask: pomegranate },
-  { id: 'lotus', name: 'Lotus', defaultSize: 0.45, pngMask: lotus },
-  { id: 'paisley', name: 'Paisley', defaultSize: 0.36, pngMask: paisley },
-  { id: 'horse', name: 'Horse', defaultSize: 0.42, pngMask: horse },
+  { id: 'flower', name: 'Flower', defaultSize: 0.162, pngMask: flower },
+  { id: 'pomegranate', name: 'Pomegranate', defaultSize: 0.28, pngMask: pomegranate },
+  { id: 'lotus', name: 'Lotus', defaultSize: 0.52, pngMask: lotus },
+  { id: 'paisley', name: 'Paisley', defaultSize: 0.3, pngMask: paisley },
+  { id: 'horse', name: 'Horse', defaultSize: 0.3, pngMask: horse },
 ];
 
 export const STAMPS_BY_ID: Record<string, StampDef> = Object.fromEntries(STAMPS.map((s) => [s.id, s]));
