@@ -1,0 +1,14 @@
+.header {
+  flex: none;
+  padding: var(--space-3) var(--space-4) 0;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--text-lg);
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+}
