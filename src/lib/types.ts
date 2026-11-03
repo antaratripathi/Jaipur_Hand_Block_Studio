@@ -28,3 +28,14 @@ export interface Press {
   inkLevel: number;
   seed: number;
 }
+
+/** The handwritten message. Position is the text centre as a fraction of the card. */
+export interface Message {
+  text: string;
+  fontId: string;
+  color: string;
+  x: number;
+  y: number;
+  /** Font size as a fraction of the card width. */
+  size: number;
+}

@@ -3,31 +3,48 @@ import { STAMPS, STAMPS_BY_ID } from '../../assets/stamps/stamps';
 import { INKS } from '../../lib/inks';
 import type { Press } from '../../lib/types';
 import { preloadStampMasks } from '../../lib/stampMask';
+import { loadHandFonts } from '../../lib/fonts';
+import { downloadPDF, downloadPNG } from '../../lib/export';
 import { usePrintState } from '../../hooks/usePrintState';
 import { useInk } from '../../hooks/useInk';
+import { useMessage } from '../../hooks/useMessage';
 import { useStamping } from '../../hooks/useStamping';
 import { useElementSize } from '../../hooks/useElementSize';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import BlockTray from '../BlockTray/BlockTray';
 import InkPad from '../InkPad/InkPad';
-import Paper from '../Paper/Paper';
+import Paper, { type SheetPhase } from '../Paper/Paper';
 import GhostBlock from '../GhostBlock/GhostBlock';
+import MessageTool from '../MessageTool/MessageTool';
+import DraggableMessage from '../MessageTool/DraggableMessage';
+import Controls from '../Controls/Controls';
 import styles from './PrintTable.module.css';
 
 const DRY_COLOR = '#6f4a2a';
 
 export default function PrintTable() {
-  const { state, addPress, undo } = usePrintState();
+  const { state, addPress, undo, wash, newSheet } = usePrintState();
   const { inkId, setInkId, blocks, dab, deplete } = useInk();
+  const { message, update: updateMessage, reset: resetMessage } = useMessage();
   const [stampId, setStampId] = useState<string | null>(null);
-  const [masksReady, setMasksReady] = useState(0);
+  const [assetsVersion, setAssetsVersion] = useState(0);
   const [dryShake, setDryShake] = useState(0);
+  const [phase, setPhase] = useState<SheetPhase>('idle');
   const surfaceRef = useRef<HTMLDivElement>(null);
   const paperRef = useRef<HTMLDivElement>(null);
   const paperSize = useElementSize(paperRef);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    preloadStampMasks(STAMPS).then(() => setMasksReady((n) => n + 1));
+    const bump = () => setAssetsVersion((n) => n + 1);
+    preloadStampMasks(STAMPS).then(bump);
+    loadHandFonts().then(bump);
   }, []);
+
+  // Fonts may finish downloading after a font switch.
+  useEffect(() => {
+    document.fonts?.ready.then(() => setAssetsVersion((n) => n + 1));
+  }, [message.fontId]);
 
   const def = stampId ? STAMPS_BY_ID[stampId] : null;
   const blockInk = stampId ? blocks[stampId] : undefined;
@@ -44,7 +61,7 @@ export default function PrintTable() {
   const { ghost, rotation, rotate, pressing, handlers } = useStamping({
     surfaceRef,
     paperRef,
-    stampId,
+    stampId: phase === 'idle' ? stampId : null,
     color: blockInk?.color ?? DRY_COLOR,
     inkLevel: blockInk?.level ?? 0,
     onDry,
@@ -57,9 +74,32 @@ export default function PrintTable() {
   };
 
   const scene = useMemo(
-    () => ({ presses: state.presses, paperSeed: state.paperSeed, masksReady }),
-    [state.presses, state.paperSeed, masksReady],
+    () => ({ presses: state.presses, paperSeed: state.paperSeed, message }),
+    [state.presses, state.paperSeed, message],
   );
+
+  const ms = (n: number) => (reducedMotion ? 0 : n);
+
+  const onWash = () => {
+    if (phase !== 'idle') return;
+    setPhase('washing');
+    window.setTimeout(() => {
+      wash();
+      resetMessage();
+      setPhase('idle');
+    }, ms(700));
+  };
+
+  const onNewSheet = () => {
+    if (phase !== 'idle') return;
+    setPhase('leaving');
+    window.setTimeout(() => {
+      newSheet();
+      resetMessage();
+      setPhase('entering');
+      window.setTimeout(() => setPhase('idle'), ms(500));
+    }, ms(450));
+  };
 
   return (
     <main className={styles.table}>
@@ -69,7 +109,14 @@ export default function PrintTable() {
 
       <div ref={surfaceRef} className={`${styles.surface} ${def ? styles.armed : ''}`} {...handlers}>
         <div className={styles.paperSlot}>
-          <Paper ref={paperRef} scene={scene} pressCount={state.presses.length} />
+          <Paper ref={paperRef} scene={scene} assetsVersion={assetsVersion} pressCount={state.presses.length} phase={phase}>
+            <DraggableMessage
+              message={message}
+              paperWidth={paperSize.width}
+              enabled={!def && phase === 'idle'}
+              onMove={(x, y) => updateMessage({ x, y })}
+            />
+          </Paper>
         </div>
         {def && !blockInk && (
           <p className={styles.nudge} key={dryShake} aria-live="polite">
@@ -80,14 +127,21 @@ export default function PrintTable() {
 
       <aside className={styles.controls}>
         <InkPad inkId={inkId} holding={def?.name ?? null} onDab={onDab} />
-        <div className={styles.buttons}>
-          <button type="button" onClick={() => rotate(-15)} disabled={!def} aria-label="Rotate block left">⟲ Rotate</button>
-          <button type="button" onClick={() => rotate(15)} disabled={!def} aria-label="Rotate block right">Rotate ⟳</button>
-          <button type="button" onClick={undo} disabled={!state.presses.length}>Undo</button>
-        </div>
+        <MessageTool message={message} onChange={updateMessage} />
+        <Controls
+          canRotate={!!def}
+          canUndo={state.presses.length > 0}
+          hasInk={state.presses.length > 0 || !!message.text.trim()}
+          onRotate={rotate}
+          onUndo={undo}
+          onWash={onWash}
+          onNewSheet={onNewSheet}
+          onDownloadPNG={() => downloadPNG(scene)}
+          onDownloadPDF={() => downloadPDF(scene)}
+        />
       </aside>
 
-      {def && ghost && (
+      {def && ghost && phase === 'idle' && (
         <GhostBlock
           def={def}
           x={ghost.x}

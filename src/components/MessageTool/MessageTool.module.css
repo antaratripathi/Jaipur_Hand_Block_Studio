@@ -1,0 +1,93 @@
+.tool {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 248, 235, 0.55);
+  box-shadow: 0 2px 6px rgba(60, 40, 20, 0.12);
+}
+
+.label {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.input {
+  width: 100%;
+  resize: none;
+  padding: var(--space-2);
+  border: 1px solid rgba(60, 40, 20, 0.25);
+  border-radius: var(--radius-md);
+  background: #fffaf0;
+  font-family: 'Caveat', cursive;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: var(--color-text);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.font {
+  flex: 1;
+  min-height: 36px;
+  border: 1px solid rgba(60, 40, 20, 0.25);
+  border-radius: var(--radius-md);
+  background: #fffaf0;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.font[aria-pressed='true'] {
+  background: var(--color-text);
+  color: #fbf3e2;
+}
+
+.swatch {
+  flex: 1;
+  height: 24px;
+  min-width: 24px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.swatch[aria-pressed='true'] {
+  border-color: #fbf3e2;
+  box-shadow: 0 0 0 2px var(--color-text);
+}
+
+/* Invisible twin of the canvas text, so it can be dragged */
+.handle {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+  padding: 0 0.15em;
+  white-space: pre;
+  text-align: center;
+  color: transparent;
+  cursor: grab;
+  touch-action: none;
+  border-radius: var(--radius-sm);
+  outline: 1.5px dashed transparent;
+  outline-offset: 4px;
+  transition: outline-color var(--dur-fast);
+}
+
+.handle:active { cursor: grabbing; }
+
+.handle:focus-visible,
+.handle:active {
+  outline-color: rgba(59, 46, 34, 0.5);
+}
+
+@media (hover: hover) {
+  .handle:hover { outline-color: rgba(59, 46, 34, 0.35); }
+}
+
+.passive {
+  pointer-events: none;
+}

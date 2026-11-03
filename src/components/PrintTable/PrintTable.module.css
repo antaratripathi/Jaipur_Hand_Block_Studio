@@ -2,7 +2,7 @@
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(180px, 220px) 1fr minmax(140px, 200px);
+  grid-template-columns: minmax(180px, 220px) minmax(0, 1fr) minmax(220px, 260px);
   gap: var(--space-5);
   padding: var(--space-4) var(--space-5) var(--space-5);
 }
@@ -14,29 +14,9 @@
   gap: var(--space-3);
   min-height: 0;
   overflow-y: auto;
-}
-
-.controls {
-  justify-content: space-between;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.controls button:not([aria-pressed]) {
-  padding: var(--space-2) var(--space-4);
-  border: 1px solid rgba(60, 40, 20, 0.25);
-  border-radius: var(--radius-pill);
-  background: rgba(255, 248, 235, 0.7);
-  cursor: pointer;
-}
-
-.buttons button:disabled {
-  opacity: 0.45;
-  cursor: default;
+  /* Keep the panels above a sheet sliding off the table */
+  position: relative;
+  z-index: 1;
 }
 
 .surface {
@@ -87,7 +67,6 @@
   .surface { grid-row: 1; }
   .tools { grid-row: 2; min-width: 0; overflow: visible; }
   .controls { grid-row: 3; gap: var(--space-2); overflow: visible; }
-  .buttons { flex-direction: row; flex-wrap: wrap; justify-content: center; }
 
   .paperSlot {
     width: min(100%, calc((100dvh - 400px) * 2 / 3));
