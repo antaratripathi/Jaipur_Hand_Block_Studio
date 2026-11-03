@@ -80,7 +80,7 @@ src/
   assets/stamps/stamps.ts   stamp library (swap your artwork here)
   styles/tokens.css         design tokens: colours, spacing, type, radii, shadows, motion
   lib/                      canvas rendering and pure logic
-    linenTexture.ts         procedural white linen (fine, even plain weave, frayed edge)
+    linenTexture.ts         procedural white linen (fine, even plain weave)
     woodTexture.ts          procedural wood grain shared by all blocks
     renderImprint.ts        one imprint: stamp mask × seeded noise, rim darkening, ink level
     compositor.ts           paper + imprints, shared by the screen and export

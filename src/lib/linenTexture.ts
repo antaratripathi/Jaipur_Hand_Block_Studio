@@ -78,24 +78,3 @@ export function getLinenTexture(w: number, h: number, seed: number): HTMLCanvasE
   cache.set(key, c);
   return c;
 }
-
-/** A slightly uneven, finely frayed edge (in %) for the cloth's clip-path on screen. */
-export function frayedClipPath(seed: number): string {
-  const rand = seededRandom(seed ^ 0x11ce);
-  const pts: string[] = [];
-  const edge = (n: number, depth: number, fn: (t: number, j: number) => [number, number]) => {
-    const phase = rand() * Math.PI * 2;
-    for (let i = 0; i < n; i++) {
-      const t = i / n;
-      const wave = (Math.sin(t * Math.PI * 3 + phase) * 0.5 + 0.5) * 0.25;
-      const fray = rand() < 0.15 ? rand() * 0.5 : rand() * 0.12;
-      const [x, y] = fn(t, Math.min(1, wave + fray) * depth);
-      pts.push(`${x.toFixed(2)}% ${y.toFixed(2)}%`);
-    }
-  };
-  edge(140, 0.5, (t, j) => [t * 100, j * 0.67]); // top
-  edge(200, 0.75, (t, j) => [100 - j, t * 100]); // right
-  edge(140, 0.5, (t, j) => [100 - t * 100, 100 - j * 0.67]); // bottom
-  edge(200, 0.75, (t, j) => [j, 100 - t * 100]); // left
-  return `polygon(${pts.join(',')})`;
-}

@@ -20,6 +20,8 @@
 .sheet {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  border-radius: var(--radius-card);
   background: var(--color-paper);
 }
 

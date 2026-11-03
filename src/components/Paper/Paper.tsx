@@ -1,6 +1,5 @@
-import { forwardRef, useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { forwardRef, useEffect, useRef, type ReactNode } from 'react';
 import { drawInk, drawPaper, type CardScene } from '../../lib/compositor';
-import { frayedClipPath } from '../../lib/linenTexture';
 import { useElementSize } from '../../hooks/useElementSize';
 import styles from './Paper.module.css';
 
@@ -36,7 +35,6 @@ const Paper = forwardRef<HTMLDivElement, Props>(function Paper({ scene, assetsVe
   const paperCanvas = useRef<HTMLCanvasElement>(null);
   const inkCanvas = useRef<HTMLCanvasElement>(null);
   const { width, height } = useElementSize(sizeRef);
-  const clip = useMemo(() => frayedClipPath(scene.paperSeed), [scene.paperSeed]);
 
   useEffect(() => {
     if (!paperCanvas.current || !width) return;
@@ -59,7 +57,7 @@ const Paper = forwardRef<HTMLDivElement, Props>(function Paper({ scene, assetsVe
   return (
     <div ref={ref} data-card className={`${styles.stage} ${styles[phase]}`}>
       <div ref={sizeRef} className={`${styles.shadow} ${shift}`}>
-        <div className={styles.sheet} style={{ clipPath: clip }}>
+        <div className={styles.sheet}>
           <canvas ref={paperCanvas} className={styles.canvas} aria-hidden />
           <canvas
             ref={inkCanvas}
