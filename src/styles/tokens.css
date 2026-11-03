@@ -2,7 +2,7 @@
 :root {
   /* Surfaces */
   --color-page: #ffffff;
-  --color-paper: #f4f2ec;
+  --color-paper: #f1efe8;
   --color-wood-light: #c9925c;
   --color-wood: #a8703f;
   --color-wood-side: #7c4c27;
@@ -12,13 +12,13 @@
   --color-text-muted: #8e8e93;
   --color-text-faint: #b8b8bd;
   --color-line: #d7d7db;
-  --color-focus: #1f2f6b;
+  --color-focus: #15236e;
 
   /* Inks (mirrored in lib/inks.ts for canvas use) */
-  --ink-navy: #1f2f6b;
-  --ink-red: #c8312b;
-  --ink-pink: #e57fa6;
-  --ink-lime: #9bc23a;
+  --ink-blue: #15236e;
+  --ink-red: #c8161d;
+  --ink-pink: #e23d91;
+  --ink-green: #5c9a2c;
 
   /* Spacing */
   --space-1: 4px;

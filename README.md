@@ -1,6 +1,6 @@
-# The Jaipur Hand-Block Table
+# Jaipur Hand Block Studio
 
-A calm, tactile hand-block printing table in the browser, in the spirit of Jaipur's Sanganeri block printers. Pick up a carved wooden block, ink it in navy, red, pink or lime, press it onto a 4×6 handmade card, and download the result as a print-ready PNG or PDF.
+A calm, tactile hand-block printing table in the browser, in the spirit of Jaipur's Sanganeri block printers. Pick up a carved wooden block, ink it in navy blue, red, pink or leaf green, press it onto a 4×6 card of white linen, and download the result as a print-ready PNG or PDF.
 
 Built with Vite, React, TypeScript and CSS Modules. No backend.
 
@@ -55,7 +55,7 @@ All blocks live in [`src/assets/stamps/stamps.ts`](src/assets/stamps/stamps.ts).
 | `cut` | Optional path carved back out of the face (eyes, veins, highlights) |
 | `pngMask` | Or, instead of `svgPath`: a PNG whose alpha channel is the carved face |
 
-For a PNG, put the file in `src/assets/stamps/` and import it:
+The five current stamps (flower, pomegranate, lotus, paisley, horse) are PNG masks. For a new PNG, put the file in `src/assets/stamps/` and import it:
 
 ```ts
 import lotus from './lotus.png';
@@ -72,7 +72,7 @@ src/
   assets/stamps/stamps.ts   stamp library (swap your artwork here)
   styles/tokens.css         design tokens: colours, spacing, type, radii, shadows, motion
   lib/                      canvas rendering and pure logic
-    paperTexture.ts         procedural paper (mottling, grain, fibres, deckled edge)
+    linenTexture.ts         procedural white linen (plain weave, slubs, flax flecks, frayed edge)
     woodTexture.ts          procedural wood grain shared by all blocks
     renderImprint.ts        one imprint: stamp mask × seeded noise, rim darkening, ink level
     compositor.ts           paper + imprints, shared by the screen and export

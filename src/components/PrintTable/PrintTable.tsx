@@ -123,9 +123,9 @@ export default function PrintTable() {
           <Paper ref={paperRef} scene={scene} assetsVersion={assetsVersion} pressCount={state.presses.length} phase={phase} />
         </div>
 
-        <section className={styles.panel} aria-label="Jaipur hand-block printing">
+        <section className={styles.panel} aria-label="Jaipur Hand Block Studio">
           <header className={styles.header}>
-            <h1 className={styles.title}>The Jaipur hand-block table</h1>
+            <h1 className={styles.title}>Jaipur Hand Block Studio</h1>
             <p className={styles.subtitle}>Ink a carved block and press your own card, the Sanganeri way</p>
           </header>
 

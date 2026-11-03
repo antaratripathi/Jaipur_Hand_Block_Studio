@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { drawInk, drawPaper, type CardScene } from '../../lib/compositor';
-import { deckledClipPath } from '../../lib/paperTexture';
+import { frayedClipPath } from '../../lib/linenTexture';
 import { useElementSize } from '../../hooks/useElementSize';
 import styles from './Paper.module.css';
 
@@ -36,7 +36,7 @@ const Paper = forwardRef<HTMLDivElement, Props>(function Paper({ scene, assetsVe
   const paperCanvas = useRef<HTMLCanvasElement>(null);
   const inkCanvas = useRef<HTMLCanvasElement>(null);
   const { width, height } = useElementSize(sizeRef);
-  const clip = useMemo(() => deckledClipPath(scene.paperSeed), [scene.paperSeed]);
+  const clip = useMemo(() => frayedClipPath(scene.paperSeed), [scene.paperSeed]);
 
   useEffect(() => {
     if (!paperCanvas.current || !width) return;

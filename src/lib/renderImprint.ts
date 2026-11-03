@@ -49,7 +49,7 @@ export function renderImprint(press: Press, def: StampDef, size: number): HTMLCa
   const blotch = valueNoise(press.seed + 1, 5);
   const mid = valueNoise(press.seed + 2, 16);
   const streak = valueNoise(press.seed + 3, 3, 36); // wood grain of the block face
-  const baseOpacity = 0.8 + rand() * 0.15;
+  const baseOpacity = 0.9 + rand() * 0.08;
   const ink = press.inkLevel;
   const threshold = 0.2 + (1 - ink) * 0.42;
   const [r, g, b] = hexToRgb(press.color);
@@ -76,7 +76,7 @@ export function renderImprint(press: Press, def: StampDef, size: number): HTMLCa
       let cov = 0.45 * blotch(u, v) + 0.3 * m + 0.25 * streak(u, v) + (grain - 0.5) * 0.35 + edge * 0.3;
       let alpha = smoothstep(threshold - 0.07, threshold + 0.07, cov);
       if (grain > 0.985) alpha *= 0.15; // pinholes where ink didn't take
-      alpha *= (a / 255) * baseOpacity * (0.5 + 0.5 * ink) * (0.85 + 0.15 * m);
+      alpha *= (a / 255) * baseOpacity * (0.5 + 0.5 * ink) * (0.92 + 0.08 * m);
       if (alpha <= 0.004) continue;
       const shade = 1 - 0.32 * edge - 0.08 * (1 - m);
       d[i] = r * shade;

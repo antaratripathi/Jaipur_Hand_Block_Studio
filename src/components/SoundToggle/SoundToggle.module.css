@@ -13,7 +13,7 @@
 }
 
 .toggle[aria-pressed='true'] {
-  color: var(--ink-navy);
+  color: var(--ink-blue);
 }
 
 @media (hover: hover) {

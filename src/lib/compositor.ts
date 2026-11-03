@@ -1,6 +1,6 @@
 import type { Press } from './types';
 import { STAMPS_BY_ID } from '../assets/stamps/stamps';
-import { getPaperTexture } from './paperTexture';
+import { getLinenTexture } from './linenTexture';
 import { renderImprint } from './renderImprint';
 
 export interface CardScene {
@@ -9,7 +9,7 @@ export interface CardScene {
 }
 
 export function drawPaper(ctx: CanvasRenderingContext2D, w: number, h: number, scene: CardScene): void {
-  ctx.drawImage(getPaperTexture(w, h, scene.paperSeed), 0, 0, w, h);
+  ctx.drawImage(getLinenTexture(w, h, scene.paperSeed), 0, 0, w, h);
 }
 
 /** Imprints, multiplied onto whatever is already in ctx (paper, or transparent on screen). */
