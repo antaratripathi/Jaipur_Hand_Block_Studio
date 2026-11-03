@@ -1,8 +1,16 @@
 # Jaipur Hand Block Studio
 
-A calm, tactile hand-block printing table in the browser, in the spirit of Jaipur's Sanganeri block printers. Pick up a carved wooden block, ink it in navy blue, red, pink or leaf green, press it onto a 4×6 card of white linen, and download the result as a print-ready PNG (1200×1800 px, 4×6 in at 300 dpi).
+The traditional Jaipur hand block printing experience, made digital.
 
-Built with Vite, React, TypeScript and CSS Modules. No backend.
+Inspired by the block printers of Sanganer and Bagru, this project lets you print your own designs the way artisans have for centuries: with a carved block, a pad of ink, and a firm press.
+
+## How it works
+
+1. **Select a hand block motif** from the collection of carved blocks.
+2. **Select an ink** for your block.
+3. **Stamp it** onto the linen fabric and build up your own design, one press at a time.
+
+When you're happy with your piece, download it and keep it.
 
 ## Run locally
 
