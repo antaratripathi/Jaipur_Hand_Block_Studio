@@ -8,19 +8,18 @@ interface SheetProps {
   onWash: () => void;
   onNewSheet: () => void;
   onDownloadPNG: () => Promise<void>;
-  onDownloadPDF: () => Promise<void>;
 }
 
-/** Undo · Wash off · New sheet, and the downloads, as quiet text links. */
+/** Undo · Wash off · New sheet, and the download, as quiet text links. */
 export function SheetControls(p: SheetProps) {
-  const [busy, setBusy] = useState<'png' | 'pdf' | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  const run = async (kind: 'png' | 'pdf', fn: () => Promise<void>) => {
-    setBusy(kind);
+  const download = async () => {
+    setBusy(true);
     try {
-      await fn();
+      await p.onDownloadPNG();
     } finally {
-      setBusy(null);
+      setBusy(false);
     }
   };
 
@@ -33,14 +32,9 @@ export function SheetControls(p: SheetProps) {
         <span className={styles.sep} aria-hidden>·</span>
         <button type="button" className={styles.link} onClick={p.onNewSheet}>New sheet</button>
       </p>
-      <div className={styles.downloads}>
-        <button type="button" className={`${styles.link} ${styles.download}`} onClick={() => run('png', p.onDownloadPNG)} disabled={!p.hasInk || busy !== null}>
-          <span aria-hidden>↳</span> {busy === 'png' ? 'Saving…' : 'Download PNG'}
-        </button>
-        <button type="button" className={`${styles.link} ${styles.download}`} onClick={() => run('pdf', p.onDownloadPDF)} disabled={!p.hasInk || busy !== null}>
-          <span aria-hidden>↳</span> {busy === 'pdf' ? 'Saving…' : 'Download PDF'}
-        </button>
-      </div>
+      <button type="button" className={`${styles.link} ${styles.download}`} onClick={download} disabled={!p.hasInk || busy}>
+        {busy ? 'Saving…' : 'Download PNG'}
+      </button>
     </div>
   );
 }

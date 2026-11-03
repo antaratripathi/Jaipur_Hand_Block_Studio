@@ -39,17 +39,11 @@
   .link:not(:disabled):hover { color: var(--color-text); }
 }
 
-.downloads {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-@media (max-width: 760px) {
-  .downloads {
-    flex-direction: row;
-    gap: var(--space-5);
-  }
+/* Last line of the panel: its text sits flush with the bottom edge of the cloth */
+.download {
+  align-self: flex-start;
+  min-height: 0;
+  line-height: 1;
 }
 
 .download:not(:disabled) {

@@ -33,12 +33,3 @@ export function downloadPNG(scene: CardScene): Promise<void> {
     }, 'image/png');
   });
 }
-
-export async function downloadPDF(scene: CardScene): Promise<void> {
-  const { jsPDF } = await import('jspdf');
-  const canvas = renderExport(scene);
-  const pdf = new jsPDF({ orientation: 'portrait', unit: 'in', format: [4, 6] });
-  // JPEG keeps the file small; the card is fully opaque so nothing is lost to transparency.
-  pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 4, 6);
-  pdf.save('block-print-card.pdf');
-}

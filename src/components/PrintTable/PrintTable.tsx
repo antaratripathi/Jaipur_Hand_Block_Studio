@@ -3,7 +3,7 @@ import { STAMPS, STAMPS_BY_ID } from '../../assets/stamps/stamps';
 import { INKS } from '../../lib/inks';
 import type { Press } from '../../lib/types';
 import { preloadStampMasks } from '../../lib/stampMask';
-import { downloadPDF, downloadPNG } from '../../lib/export';
+import { downloadPNG } from '../../lib/export';
 import { sounds } from '../../lib/sound';
 import { usePrintState } from '../../hooks/usePrintState';
 import { useInk } from '../../hooks/useInk';
@@ -102,12 +102,6 @@ export default function PrintTable() {
     }, ms(450));
   };
 
-  const step = !def
-    ? 'Pick up a block'
-    : !blockInk
-      ? 'Ink it on the pad'
-      : 'Press it on the paper. Put it back when you’re done.';
-
   return (
     <main ref={areaRef} className={`${styles.page} ${def ? styles.armed : ''}`} {...handlers}>
       <SoundToggle on={sound.on} onToggle={sound.toggle} className={styles.sound} />
@@ -126,16 +120,17 @@ export default function PrintTable() {
         <section className={styles.panel} aria-label="Jaipur Hand Block Studio">
           <header className={styles.header}>
             <h1 className={styles.title}>Jaipur Hand Block Studio</h1>
-            <p className={styles.subtitle}>Ink a carved block and press your own card, the Sanganeri way</p>
+            <p className={styles.subtitle}>Experience the authentic art of Jaipur hand block printing</p>
           </header>
 
-          <BlockTray selectedId={stampId} inks={blocks} onSelect={setStampId} />
+          <div className={styles.step}>
+            <p className={styles.label}>Select a hand block motif</p>
+            <BlockTray selectedId={stampId} inks={blocks} onSelect={setStampId} />
+          </div>
 
-          <div className={styles.inkRow}>
+          <div className={styles.step}>
+            <p className={styles.label}>Select an ink for your block</p>
             <InkPad inkId={inkId} holding={def?.name ?? null} onDab={onDab} />
-            <p key={`${step}-${dryShake}`} className={`${styles.step} ${dryShake && def && !blockInk ? styles.nudge : ''}`} aria-live="polite">
-              {step}
-            </p>
           </div>
 
           <div className={styles.footer}>
@@ -146,7 +141,6 @@ export default function PrintTable() {
               onWash={onWash}
               onNewSheet={onNewSheet}
               onDownloadPNG={() => downloadPNG(scene)}
-              onDownloadPDF={() => downloadPDF(scene)}
             />
           </div>
         </section>
