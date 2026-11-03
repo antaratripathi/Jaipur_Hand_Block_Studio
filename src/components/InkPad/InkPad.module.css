@@ -59,6 +59,6 @@
 @media (max-width: 860px) {
   .tin { padding: var(--space-2); }
   .pads { grid-template-columns: repeat(6, 1fr); }
-  .pad { min-width: 0; }
+  .pad { min-width: 0; aspect-ratio: auto; height: 44px; }
   .caption { display: none; }
 }

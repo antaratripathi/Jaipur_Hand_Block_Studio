@@ -1,19 +1,34 @@
 import { useState } from 'react';
 import styles from './Controls.module.css';
 
-interface Props {
+interface QuickProps {
   canRotate: boolean;
   canUndo: boolean;
-  hasInk: boolean;
   onRotate: (deg: number) => void;
   onUndo: () => void;
+}
+
+/** Rotate and undo: always within reach. */
+export function QuickControls({ canRotate, canUndo, onRotate, onUndo }: QuickProps) {
+  return (
+    <div className={styles.group}>
+      <button type="button" onClick={() => onRotate(-15)} disabled={!canRotate} aria-label="Rotate block left">⟲</button>
+      <button type="button" onClick={() => onRotate(15)} disabled={!canRotate} aria-label="Rotate block right">⟳</button>
+      <button type="button" onClick={onUndo} disabled={!canUndo}>Undo</button>
+    </div>
+  );
+}
+
+interface SheetProps {
+  hasInk: boolean;
   onWash: () => void;
   onNewSheet: () => void;
   onDownloadPNG: () => Promise<void>;
   onDownloadPDF: () => Promise<void>;
 }
 
-export default function Controls(p: Props) {
+/** Wash off, new sheet and downloads. */
+export function SheetControls(p: SheetProps) {
   const [busy, setBusy] = useState<'png' | 'pdf' | null>(null);
 
   const run = async (kind: 'png' | 'pdf', fn: () => Promise<void>) => {
@@ -26,12 +41,7 @@ export default function Controls(p: Props) {
   };
 
   return (
-    <section className={styles.controls} aria-label="Sheet controls">
-      <div className={styles.group}>
-        <button type="button" onClick={() => p.onRotate(-15)} disabled={!p.canRotate} aria-label="Rotate block left">⟲</button>
-        <button type="button" onClick={() => p.onRotate(15)} disabled={!p.canRotate} aria-label="Rotate block right">⟳</button>
-        <button type="button" onClick={p.onUndo} disabled={!p.canUndo}>Undo</button>
-      </div>
+    <div className={styles.controls}>
       <div className={styles.group}>
         <button type="button" onClick={p.onWash} disabled={!p.hasInk}>Wash off</button>
         <button type="button" onClick={p.onNewSheet}>New sheet</button>
@@ -44,6 +54,6 @@ export default function Controls(p: Props) {
           {busy === 'pdf' ? 'Saving…' : 'Download PDF'}
         </button>
       </div>
-    </section>
+    </div>
   );
 }
