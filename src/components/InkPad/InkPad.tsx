@@ -5,7 +5,7 @@ import styles from './InkPad.module.css';
 interface Props {
   inkId: string;
   holding: string | null;
-  /** Tapping a pad chooses its colour (also used for the message) and inks the block in hand. */
+  /** Tapping a pad chooses its colour and inks the block in hand. */
   onDab: (inkId: string) => void;
 }
 

@@ -14,17 +14,6 @@
   color: var(--color-text-muted);
 }
 
-.item {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.label {
-  margin-right: 6px;
-  color: var(--color-text-faint);
-}
-
 .sep {
   color: var(--color-text-faint);
 }
@@ -44,10 +33,6 @@
 .link:disabled {
   color: var(--color-text-faint);
   cursor: default;
-}
-
-.link[aria-pressed='true'] {
-  color: var(--color-text);
 }
 
 @media (hover: hover) {

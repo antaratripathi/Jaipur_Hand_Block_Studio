@@ -51,7 +51,7 @@ const Paper = forwardRef<HTMLDivElement, Props>(function Paper({ scene, assetsVe
     const [w, h] = fitCanvas(inkCanvas.current, width, height);
     const ctx = inkCanvas.current.getContext('2d')!;
     ctx.clearRect(0, 0, w, h);
-    drawInk(ctx, w, h, scene, false);
+    drawInk(ctx, w, h, scene);
   }, [scene, assetsVersion, width, height]);
 
   const shift = pressCount ? (pressCount % 2 ? styles.shiftA : styles.shiftB) : '';

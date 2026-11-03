@@ -31,13 +31,3 @@ export interface Press {
   seed: number;
 }
 
-/** The handwritten message. Position is the top-left of the text block as a fraction of the card. */
-export interface Message {
-  text: string;
-  fontId: string;
-  color: string;
-  x: number;
-  y: number;
-  /** Font size as a fraction of the card width. */
-  size: number;
-}

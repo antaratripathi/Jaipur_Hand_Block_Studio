@@ -1,6 +1,6 @@
-# The Block Print Table
+# The Jaipur Hand-Block Table
 
-A calm, tactile block-printing table in the browser. Pick up a carved wooden block, ink it in navy, red, pink or lime, press it onto a 4×6 handmade card, write a message straight onto the card, and download the result as a print-ready PNG or PDF.
+A calm, tactile hand-block printing table in the browser, in the spirit of Jaipur's Sanganeri block printers. Pick up a carved wooden block, ink it in navy, red, pink or lime, press it onto a 4×6 handmade card, and download the result as a print-ready PNG or PDF.
 
 Built with Vite, React, TypeScript and CSS Modules. No backend.
 
@@ -31,14 +31,12 @@ Any static host works: upload the `dist/` folder after `npm run build`.
 ## How to use
 
 1. **Pick up a block** from the tray.
-2. **Ink it**: choose one of the four colours under the ink pad, then tap the pad. The block takes the colour, and one dab lasts five presses, each fainter than the last. Then the block is dry and needs inking again (set `PRESSES_PER_DAB` in `src/hooks/useInk.ts`).
+2. **Ink it**: tap one of the four ink pads. The block takes the colour, and one dab lasts five presses, each fainter than the last. Then the block is dry and needs inking again (set `PRESSES_PER_DAB` in `src/hooks/useInk.ts`).
 3. **Press it**: click or tap on the card. On touch, drag to aim and lift to press. Tap the empty slot in the tray to put the block back.
-
-Type your message straight onto the card ("Write a custom message"). Drag the small handle beside it to move it, and pick Serif, Hand or Script under Lettering. It uses the current ink colour.
 
 Rotate with the scroll wheel, the ⟲ ⟳ buttons, or a two-finger twist on touch.
 
-**Keyboard:** with a block in hand, the arrow keys move it (hold Shift for bigger steps), Enter or Space presses, `[` and `]` (or R / Shift+R) rotate, and Escape puts it down. Select the message on the card and use the arrow keys to move it.
+**Keyboard:** with a block in hand, the arrow keys move it (hold Shift for bigger steps), Enter or Space presses, `[` and `]` (or R / Shift+R) rotate, and Escape puts it down.
 
 Sound effects are off by default. Use the speaker icon in the top right.
 
@@ -77,10 +75,10 @@ src/
     paperTexture.ts         procedural paper (mottling, grain, fibres, deckled edge)
     woodTexture.ts          procedural wood grain shared by all blocks
     renderImprint.ts        one imprint: stamp mask × seeded noise, rim darkening, ink level
-    compositor.ts           paper + imprints + message, shared by the screen and export
+    compositor.ts           paper + imprints, shared by the screen and export
     export.ts               1200×1800 PNG and 4×6 in PDF (jsPDF)
     sound.ts                synthesised sound effects (Web Audio)
-  hooks/                    state and interaction (prints, ink, aiming, message, layout)
+  hooks/                    state and interaction (prints, ink, aiming, sound)
   components/               UI, one folder per component with its own .module.css
 ```
 

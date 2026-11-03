@@ -1,28 +1,5 @@
 import { useState } from 'react';
-import { HAND_FONTS } from '../../lib/fonts';
 import styles from './Controls.module.css';
-
-interface LetteringProps {
-  fontId: string;
-  onChange: (fontId: string) => void;
-}
-
-/** Choose the message lettering. */
-export function Lettering({ fontId, onChange }: LetteringProps) {
-  return (
-    <p className={styles.row} role="group" aria-label="Message lettering">
-      <span className={styles.label}>Lettering</span>
-      {HAND_FONTS.map((f, i) => (
-        <span key={f.id} className={styles.item}>
-          {i > 0 && <span className={styles.sep} aria-hidden>·</span>}
-          <button type="button" className={styles.link} aria-pressed={f.id === fontId} onClick={() => onChange(f.id)}>
-            {f.name}
-          </button>
-        </span>
-      ))}
-    </p>
-  );
-}
 
 interface SheetProps {
   canUndo: boolean;
