@@ -7,9 +7,8 @@ export interface BlockInk {
   level: number;
 }
 
-/** Each press uses up some ink, so later prints fade until the block is re-inked. */
-const DEPLETION = 0.8;
-const MIN_LEVEL = 0.12;
+/** One dab of ink lasts this many presses, each fainter than the last; then the block is dry. */
+export const PRESSES_PER_DAB = 5;
 
 export function useInk() {
   const [inkId, setInkId] = useState(INKS[0].id);
@@ -23,7 +22,12 @@ export function useInk() {
     setBlocks((b) => {
       const ink = b[stampId];
       if (!ink) return b;
-      return { ...b, [stampId]: { ...ink, level: Math.max(MIN_LEVEL, ink.level * DEPLETION) } };
+      const level = Math.max(0, ink.level - 1 / PRESSES_PER_DAB);
+      if (level < 0.001) {
+        const { [stampId]: _dry, ...rest } = b;
+        return rest;
+      }
+      return { ...b, [stampId]: { ...ink, level } };
     });
   }, []);
 

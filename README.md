@@ -31,7 +31,7 @@ Any static host works: upload the `dist/` folder after `npm run build`.
 ## How to use
 
 1. **Pick up a block** from the tray.
-2. **Ink it**: choose one of the four colours under the ink pad, then tap the pad. The block takes the colour, and each press uses some ink, so re-ink when prints fade.
+2. **Ink it**: choose one of the four colours under the ink pad, then tap the pad. The block takes the colour, and one dab lasts five presses, each fainter than the last. Then the block is dry and needs inking again (set `PRESSES_PER_DAB` in `src/hooks/useInk.ts`).
 3. **Press it**: click or tap on the card. On touch, drag to aim and lift to press. Tap the empty slot in the tray to put the block back.
 
 Type your message straight onto the card ("Write a custom message"). Drag the small handle beside it to move it, and pick Serif, Hand or Script under Lettering. It uses the current ink colour.
