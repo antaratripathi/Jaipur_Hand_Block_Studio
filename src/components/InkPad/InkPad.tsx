@@ -9,7 +9,7 @@ interface Props {
   onDab: () => void;
 }
 
-/** One ink tin whose felt shows the chosen colour, with the four colours beneath it. */
+/** The ink pad: felt in the chosen colour, with the four colours beneath it. */
 export default function InkPad({ inkId, holding, onPick, onDab }: Props) {
   const [dabbing, setDabbing] = useState(0);
   const ink = INKS.find((i) => i.id === inkId) ?? INKS[0];
