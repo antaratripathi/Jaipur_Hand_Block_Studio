@@ -1,7 +1,7 @@
 /* Design tokens: the single source for colour, spacing, type, radii, shadows, motion. */
 :root {
   /* Surfaces */
-  --color-page: #ffffff;
+  --color-page: #f3efe6;
   --color-paper: #f1efe8;
   --color-wood-light: #c9925c;
   --color-wood: #a8703f;
